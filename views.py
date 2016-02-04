@@ -51,6 +51,7 @@ def sign_in_page(request):
 
 def logout(request):
     auth_logout(request)
+    '''some change'''
     return home(request)
 
 '''I need to look up the template names for the registration thingos and put in the boilerplate'''

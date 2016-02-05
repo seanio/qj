@@ -1,8 +1,14 @@
 {%  extends "queuejumper/base.html" %}
 {% load staticfiles %}
+{% block banner %}
+    {{ block.super }}
+    <a href={% url 'details' %}</a>
+{% endblock banner %}
 {% block content %}
     {% if user.is_authenticated %}
     <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+        <a href="details">My details</a>
+
 {% else %}
     <p>Welcome, new user. Please log in.</p>
 {% endif %}

@@ -37,20 +37,24 @@
 {% csrf_token %}
 <table>
 <tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
+    <td>{{ create_form.username.label_tag }}</td>
+    <td>{{ create_form.username }}</td>
 </tr>
 <tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
+    <td>{{ create_form.password1.label_tag }}</td>
+    <td>{{ create_form.password1 }}</td>
 </tr>
     <tr>
-    <td>{{ form.email.label_tag }}</td>
-    <td>{{ form.email }}</td>
+    <td>{{ create_form.password2.label_tag }}</td>
+    <td>{{ create_form.password2 }}</td>
+</tr>
+    <tr>
+    <td><strong>Email</strong></td>
+    <td><input type="text" name="email"/></td>
 </tr>
 </table>
 
-<input type="submit" value="login" />
+<input type="submit" value="Create new account" />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 

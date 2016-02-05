@@ -7,7 +7,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views
 from . import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import logout as auth_logout
 
 
@@ -29,19 +29,27 @@ def place_order(request, order):
 # home page once logged on. Can place an order with and choose options to jump
 @login_required(login_url='/queuejumper/login')
 def home(request):
-    customer = Customer.objects.get(username=request.user.username)
+    customer = Customer.objects.get_or_create(username=request.user.username)
     return render(request, 'queuejumper/home.html')
 
 
 def login(request):
-    template_response = views.login(request)
-    return template_response
+    if request.method == 'POST':
+        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+        if user is not None:
+            auth_login(request, user)
+    if request.method == 'GET':
+        create_form = UserCreationForm()
+        form = AuthenticationForm()
+        return render(request, 'registration/login.html', {'form': form, 'create_form': create_form})
+    return render(request, 'queuejumper/home.html')
 
 
 def create_account(request):
-    User.objects.create_user(request.POST.username, request.POST.email, request.POST.password)
-    user = authenticate(username=request.POST.username, password=request.POST.password)
-    return render(request, 'queuejumper/home.html', {'customer': Customer.objects.get(username=user.username)})
+    user = User.objects.create_user(request.POST['username'], request.POST['email'], request.POST['password2'])
+    customer = Customer.objects.create(username=user.username)
+    authenticate(username=user.username, password=['request.POST.password2'])
+    return render(request, 'queuejumper/home.html', {'customer': customer})
 
 
 def sign_in_page(request):
@@ -53,5 +61,11 @@ def logout(request):
     auth_logout(request)
     '''some change'''
     return home(request)
+
+@login_required(login_url='/queuejumper/login')
+def details(request):
+    customer = Customer.objects.get(username=request.user.username)
+    return render(request, 'queuejumper/details.html', {'customer': customer})
+
 
 '''I need to look up the template names for the registration thingos and put in the boilerplate'''

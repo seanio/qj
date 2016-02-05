@@ -1,0 +1,25 @@
+{% extends 'queuejumper/home.html' %}
+{% block content %}
+    {{ customer }}
+    {% if edit %}
+        <form action="/queuejumper/do_change_details">
+{% else %}
+        <a href="/queuejumper/change_details">Change</a>
+    {% endif %}
+{% for field, val in customer %}
+<div>
+    <label>{{ field }}:</label>
+    <p>{{ val }}</p>
+{% if edit %}
+        <input type="text" placeholder="{{ val }}" name="{{ field }}">
+
+    {% endif %}
+</div>
+{% endfor %}
+
+    {% if edit %}
+        </form>
+
+    {% endif %}
+
+{% endblock %}
